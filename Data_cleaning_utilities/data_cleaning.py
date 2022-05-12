@@ -13,7 +13,7 @@ class ProcessReviews:
         0 - the review does not contain the keyword
         1 - the review contains the keyword
         """
-        self.df['acne'] = self.df.review_text.str.contains('acne|break.out|breakout|pimple', flags=re.IGNORECASE,
+        self.df['acne'] = self.df.review_text.str.contains('acne|break.out|breakout|pimple|zit', flags=re.IGNORECASE,
                                                            regex=True).astype(int)
         self.df['blackheads'] = self.df.review_text.str.contains('blackhead|clogged pores', flags=re.IGNORECASE,
                                                                  regex=True).astype(int)
@@ -38,12 +38,13 @@ class ProcessReviews:
         # remove empty reviews
         self.df.dropna(subset=['review_body', 'review_title'], inplace=True)
 
-        # remove non-alphanumeric characters from the product name
-        self.df = self.df['product_name'].str.replace('[^\w\s]', '')
 
         # join the title and the body of the reviews
-        self.df['review_text'] = self.df.review_title + ' ' + self.df.review_body
+        self.df['review_text'] = self.df['review_title'] + ' ' + self.df['review_body']
         self.df.drop(columns=['review_body', 'review_title'], inplace=True)
+
+        # remove non-alphanumeric characters from the product name
+        self.df['product_name'] = self.df['product_name'].str.replace('[^\w\s]', '')
 
         # check which reviews contain the keywords
         self.check_keywords()
@@ -52,19 +53,24 @@ class ProcessReviews:
         num_kw = 10
         self.df = self.df.loc[(self.df.iloc[:, -num_kw:] != 0).any(axis=1)]
 
+        # order reviews alphabetically by product
+        self.df = self.df.sort_values('product_name').reset_index(drop=True)
+
         return self.df
 
-    def write_reviews(self):
-        # combine all reviews for a single product (separated by \n)
-        agg_reviews = self.df.groupby('product_name')['review_text'].agg(lambda x: '\n'.join(x))
 
-        # replace spaces with "_" in the product name:
-        agg_reviews.index = agg_reviews.index.str.split().str.join('_')
+def write_reviews(df):
 
-        # Write reviews to a file readable by AWS comprehend. One file per product, one review per line.
-        for index, value in agg_reviews.items():
-            with open(f"{index}.txt", 'w', encoding='utf-8') as f:
-                f.write(value)
+    # combine all reviews for a single product (separated by \n)
+    agg_reviews = df.groupby('product_name')['review_text'].agg(lambda x: '\n'.join(x))
+
+    # replace spaces with "_" in the product name:
+    agg_reviews.index = agg_reviews.index.str.split().str.join('_')
+
+    # Write reviews to a file readable by AWS comprehend. One file per product, one review per line.
+    for index, value in agg_reviews.items():
+        with open(f"{index}.txt", 'w', encoding='utf-8') as f:
+            f.write(value)
 
 
 if __name__ == '__main__':
@@ -74,5 +80,6 @@ if __name__ == '__main__':
     process = ProcessReviews(reviews)
 
     cleaned_reviews = process.clean()
-    process.write_reviews()
+
+    write_reviews(cleaned_reviews)
 
