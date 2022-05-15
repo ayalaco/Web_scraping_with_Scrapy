@@ -8,7 +8,7 @@ class ReviewsSpider(CrawlSpider):
     allowed_domains = ['www.amazon.com']
     start_urls = [
         'https://www.amazon.com/s?i=beauty&bbn=11060901&rh=n%3A3760911%2Cn%3A11060451%2Cn%3A11060711%2Cn%3A11060901%2Cn%3A7730189011&dc&fs=true&qid=1649029288&rnid=11060901&ref=sr_nr_n_1'
-    ] # Change me!
+    ] # Change me! (can be more than one link in the list)
 
     # save all scraped urls to avoid duplication:
     scraped_urls = []
