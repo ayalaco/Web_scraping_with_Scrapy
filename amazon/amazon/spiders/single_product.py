@@ -6,7 +6,7 @@ class SingleProductSpider(scrapy.Spider):
     allowed_domains = ['www.amazon.com']
     start_urls = [
         'https://www.amazon.com/Ingredients-Activated-Charcoal-Therapeutic-Essential/dp/B00S5HIZZC/ref=sr_1_8?qid=1649600527&rnid=11060901&s=beauty&sr=1-8'
-    ] # Change me!
+    ] # Change me! (can be more than one link in the list)
 
     def parse(self, response):
 
