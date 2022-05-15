@@ -43,8 +43,8 @@ class ProcessReviews:
         self.df['review_text'] = self.df['review_title'] + ' ' + self.df['review_body']
         self.df.drop(columns=['review_body', 'review_title'], inplace=True)
 
-        # remove non-alphanumeric characters from the product name
-        self.df['product_name'] = self.df['product_name'].str.replace('[^\w\s]', '')
+        # remove non-alphanumeric characters and unnecessary spaces from the product name
+        self.df['product_name'] = self.df['product_name'].str.replace('[^\w\s]', '').str.split().str.join(' ')
 
         # check which reviews contain the keywords
         self.check_keywords()
