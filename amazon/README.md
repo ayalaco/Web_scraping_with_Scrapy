@@ -7,7 +7,7 @@ This scraper contains two similar spiders, both aimed at scraping customer revie
 
 both spiders collect the following information: product_name, product_url, product_ingredients, review_title, review_body, rating.
 
-## Instructions of Use:
+## Usage Instructions:
 
 first, install the scraping library and its associated user-agent utility library:
 ```
