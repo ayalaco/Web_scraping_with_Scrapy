@@ -53,8 +53,8 @@ class ProcessReviews:
         num_kw = 10
         self.df = self.df.loc[(self.df.iloc[:, -num_kw:] != 0).any(axis=1)]
 
-        # order reviews alphabetically by product
-        self.df = self.df.sort_values('product_name').reset_index(drop=True)
+        # order reviews alphabetically by product and reviews
+        self.df = self.df.sort_values(['product_name', 'review_text]).reset_index(drop=True)
 
         return self.df
 
