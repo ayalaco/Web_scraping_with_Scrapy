@@ -9,7 +9,7 @@ import sqlite3
 import mysql.connector
 
 
-class SQLlitePipeline(object):
+class SQLlitePipeline:
 
     def open_spider(self, spider):
         self.connection = sqlite3.connect("amazon.db")
@@ -50,7 +50,7 @@ class SQLlitePipeline(object):
         return item
 
 
-class mySQLPipeline(object):
+class mySQLPipeline:
 
     def open_spider(self, spider):
         self.connection = mysql.connector.connect(
