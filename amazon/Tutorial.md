@@ -1,7 +1,7 @@
 # How To create your own basic spider
 
 This is a tutorial aimed to help you create your own very basic spider with scrapy.
-What it is not, is an html/CSS tutorial. Basic knowledge is required, though, and some useful links will be provided.
+What it is not, is an HTML/CSS tutorial. Basic knowledge is required, though, and some useful links will be provided.
 
 ## Install necessary libraries
 
@@ -94,11 +94,11 @@ or
 scraped_data = response.css("css_expression").get()
 ```
 
-The choice of using xpath or css depends on whether the user is more familiar with XPath expressions or with CSS.
+XPath is a language used to identify parts in an XML document (but works with HTML as well). CSS is a language used to apply styles to HTML documents. Both are equally useful for identifying relevent sections in a web page.The choice of using xpath or css depends on whether the user is more familiar with XPath expressions or with CSS.
 
 To those who are familiar with neither and/or are short on time, this chrome extension, https://selectorgadget.com/, is a useful tool that will find the css/xpath expression for you just by clicking on the desired content in the web page.
 
-Both the xpath() and css() methods return a list of selectors. In order to access the textual data within them that we want to scrape, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual contant of the first match (or None if there is no match), and **getall()** will return a list of all the results.
+Both the xpath() and css() methods return a list of selectors. Each selector in the list references a section of the document that matches the css/xpath expression. In order to access the textual data within these selectors, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual contant of the first match (or None if there is no match), and **getall()** will return a list of all the results.
 
 Alternatively, we can use nested selectors. i.e. call the selection methods on the results of the previouse selection. For example:
 
