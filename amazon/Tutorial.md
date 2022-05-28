@@ -81,3 +81,33 @@ A spider class that inherits from scrapy's base spider class, "scrapy.Spider", i
 **"start_urls" -** contains the urls of the pages we would like to start scraping from. Scrapy automatically adds "http://" to the url we inputed. Make sure to change that it "https://" if that is the case for your url. Scrapy will send sequential requests to these specified urls and the response downloaded from each url will be passed on to the **"parse()"** method to be processed (The "response" holds the url page's content and it has many helpful methods to process said content).
 
 **"parse() -"** This method is used to extract the scraped data and find new urls to follow and send new requests to.
+
+## Extract scraped data
+
+As mentioned above, the act of extracting useful data is done through the **"parse()** method. To extract data from the response, we'll use scrapy's Selectors:
+
+```python
+scraped_data = response.xpath("xpath_expression").get()
+```
+or
+```python
+scraped_data = response.css("css_expression").get()
+```
+
+The choice of using xpath or css depends on whether the user is more familiar with XPath expressions or with CSS.
+
+To those who are familiar with neither and/or are short on time, this chrome extension, https://selectorgadget.com/, is a useful tool that will find the css/xpath expression for you just by clicking on the desired content in the web page.
+
+Both the xpath() and css() methods return a list of selectors. In order to access the textual data within them that we want to scrape, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual contant of the first match (or None if there is no match), and **getall()** will return a list of all the results.
+
+Alternatively, we can use nested selectors. i.e. call the selection methods on the results of the previouse selection. For example:
+
+```python
+items = response.xpath("xpath_expression")
+    
+    for item in items:
+
+        item_title = item.xpath(".xpath_expression").get()
+        item_ingredients = item.xpath(".xpath_expression").getall()
+        item_rating = item.xpath(".xpath_expression").get()
+```
