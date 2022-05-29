@@ -103,23 +103,26 @@ Both the xpath() and css() methods return a list of selectors. Each selector in 
 Alternatively, we can use nested selectors. i.e. continue to use the selection methods to extract data from each the document sections that where selected previously. For example:
 
 ```python
-# select the relevent sections in the HTML document:
-items = response.xpath("xpath_expression")
-    
-    for item in items:
-    
-        # select data to scrape within each section:
-        item_title = item.xpath(".xpath_expression").get()
-        item_ingredients = item.xpath(".xpath_expression").getall()
-        item_rating = item.xpath(".xpath_expression").get()
-        
-        # send the scraped data to be processed:
-        yield {
-            'item_title': item_title,
-            'item_ingredients': item_ingredients,
-            'item_rating': item_rating,
-        }
+def parse(self, response):
+
+    # select the relevent sections in the HTML document:
+    items = response.xpath("xpath_expression")
+
+        for item in items:
+
+            # select data to scrape within each section:
+            item_title = item.xpath(".xpath_expression").get()
+            item_ingredients = item.xpath(".xpath_expression").getall()
+            item_rating = item.xpath(".xpath_expression").get()
+
+            # send the scraped data to be processed:
+            yield {
+                'item_title': item_title,
+                'item_ingredients': item_ingredients,
+                'item_rating': item_rating,
+            }
 ```
 
 ## Following links
 
+Sometimes we won't find all the information we want to scrape within one document. Instead, we'd like to folllow a link within the document and scrape additional information from there.
