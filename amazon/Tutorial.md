@@ -122,8 +122,8 @@ def parse(self, response):
                 'item_rating': item_rating,
             }
 ```
-*Note that when we use an xpath expression to search within a selected object instead of a response object, we need to start the expression with ".//" instead of "//".
-
+_*Note that when we use an xpath expression to search within a selected object instead of a response object, we need to start the expression with ".//" instead of "//".
+_
 If pipelines were defined in **"pipelines.py"** (not mandetory), then the dictionary that contains the scraped data is passed forward through these pipelines to be processed further. The order of the pipelines is determined in **"settings.py"** like this:
 
 ```python
@@ -138,3 +138,167 @@ The lower the number, the higher the priority of execution.
 ## Following links
 
 Sometimes we won't find all the information we want to scrape within one document. Instead, we'd like to folllow a link within the document and scrape additional information from there.
+
+There are actually several ways to do this, but the one I find simplest is to use the respnose's **"follow()"** method. This method takes in several important arguments:
+
+**url** - The url we scraped from the original document and which we wish to follow. This url can be either an absolute url or relative to the url of the current document.
+
+**callback** - The follow method sends a request to the scraped url; The returned response needs to be processed by some other function. The callback parameter determines which function the response is sent to.
+
+**meta** - Any information that was scraped within the **parse()** method can be passed forward to the next parsing function through a dictionary in the meta parameter.
+
+For example:
+
+```python
+def parse(self, response):
+    
+    # scrape data from the current page:
+    item_url = response.url
+    item_name = response.xpath("xpath_expression").get()
+    item_ingredients = response.xpath("xpath_expression").get()
+    
+    # get link to another page (for example, a reviews page):
+    link = response.xpath("xpath_expression").get()
+    
+    # follow link to another page and parse its content:
+    yield response.follow(url=link,
+                          callback=self.parse_reviews,
+                          meta={"item_url": item_url,
+                                "item_name": item_name,
+                                "item_ingredients": item_ingredients
+                                }
+                          )
+
+# define a new function for parsing reviews:
+def parse_reviews(self, response):
+    
+    # access the scraped data that was passed through the meta argument:
+    item_url = response.request.meta['item_url']
+    item_name = response.request.meta['item_name']
+    item_ingredients = response.request.meta['item_ingredients']
+    
+    # select all the seperate reviews in the page:
+    reviews = response.xpath("xpath_expression")
+    
+    # iterate over the reviews:
+    for review in reviews:
+        
+        # scrape the title and text of the review:
+        review_title = review.xpath(".xpath_expression").get()
+        review_body = review.xpath(".xpath_expression").get()
+        
+        # yield all the scraped data from one review in dict form:
+        yield {
+            'item_name': item_name,
+            'item_url': item_url,
+            'item_ingredients': item_ingredients,
+            'review_title': review_title,
+            'review_body': review_body,
+        }
+```
+
+## Pagination
+What happens if we want to scrape something that spans several pages? For example, calling back to the previouse example, when we have several pages of reviews.
+The solution is actually similar to what we just did: we follow the link to the next page from our current one, until there is no link to scrape because we reached the last page.
+```python
+next_page_link = response.xpath("xpath_expression").get()
+```
+When we reach the last page the selector will return **None** when it won't find a match.
+
+If there is a valid link to the next page, we'll follow it and send the response to the same **parse_reviews()** function (don't forget to pass the relevant data you want to pass forward through the **meta** argument).
+```python
+if next_page_link:
+    yield scrapy.follow(url=next_page_link,
+                        callback=self.parse_reviews,
+                        meta={"item_url": item_url,
+                              "item_name": item_name,
+                              "item_ingredients": item_ingredients
+                              }
+                        )
+```
+
+And to see it all together:
+```python
+import scrapy
+
+class SpiderNameSpider(scrapy.Spider):
+    name = 'spider_name'
+    allowed_domains = ['www.domainname.com']
+    start_urls = ['http://www.domainname.com/']
+
+    def parse(self, response):
+
+        # scrape data from the current page:
+        item_url = response.url
+        item_name = response.xpath("xpath_expression").get()
+        item_ingredients = response.xpath("xpath_expression").get()
+
+        # get link to another page (for example, a reviews page):
+        link = response.xpath("xpath_expression").get()
+
+        # follow link to another page and parse its content:
+        yield response.follow(url=link,
+                              callback=self.parse_reviews,
+                              meta={"item_url": item_url,
+                                    "item_name": item_name,
+                                    "item_ingredients": item_ingredients
+                                    }
+                              )
+
+    # define a new function for parsing reviews:
+    def parse_reviews(self, response):
+
+        # access the scraped data that was passed through the meta argument:
+        item_url = response.request.meta['item_url']
+        item_name = response.request.meta['item_name']
+        item_ingredients = response.request.meta['item_ingredients']
+
+        # select all the seperate reviews in the page:
+        reviews = response.xpath("xpath_expression")
+
+        # iterate over the reviews:
+        for review in reviews:
+
+            # scrape the title and text of the review:
+            review_title = review.xpath(".xpath_expression").get()
+            review_body = review.xpath(".xpath_expression").get()
+
+            # yield all the scraped data from one review in dict form:
+            yield {
+                'item_name': item_name,
+                'item_url': item_url,
+                'item_ingredients': item_ingredients,
+                'review_title': review_title,
+                'review_body': review_body,
+            }
+
+        # scrape the link for the next page:
+        next_page_link = response.xpath("xpath_expression").get()
+
+        # if a next page exists, follow the link and process the next page using the same **parse_reviews()** function:
+        if next_page_link:
+            yield scrapy.follow(url=next_page_link,
+                                callback=self.parse_reviews,
+                                meta={"item_url": item_url,
+                                      "item_name": item_name,
+                                      "item_ingredients": item_ingredients
+                                      }
+                                )
+```
+
+## Spoofing headers
+
+With everything we've done until now, we actually already have a nice functional spider. The only problem is that most websites that we would like to scrape would block our spider when they'd recognize that the requests are coming from scrapy. Furthermore, even if we change scrapy's default user-agent to our own personal one, we are still likely to get blocked if we want to scrape many pages.
+
+luckily, there are actually many ways to get around this problem, either by using rotating user-agents or by using proxies. 
+The easiest solution that worked for me simply required the installation of the scrapy-user-agent package (https://pypi.org/project/scrapy-user-agents/), and adding these lines to **settings.py**:
+```python
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+}
+```
+
+and nothing more than that is required. Now you have a functional spider that won't get blocked immediately.
+
+## Optional additions
