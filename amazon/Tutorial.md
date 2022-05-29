@@ -20,7 +20,7 @@ In the command line/Anaconda prompt/termianl, navigate into the folder where you
 scrapy startproject <project_name> [project_dir]
 ```
 
-This command generates a new folder called [project_dir]. This is the project's root directory and within it are the "scrapy.cfg" file (containing configuration parameters) and another folder called <project_name>.
+This command generates a new folder called [project_dir]. This is the project's root directory and within it are the **"scrapy.cfg"** file (containing configuration parameters) and another folder called <project_name>.
 The <project_name> folder contains the following files:
 
 ```
@@ -290,7 +290,7 @@ class SpiderNameSpider(scrapy.Spider):
 
 With everything we've done until now, we actually already have a nice functional spider. The only problem is that most websites that we would like to scrape would block our spider when they'd recognize that the requests are coming from scrapy. Furthermore, even if we change scrapy's default user-agent to our own personal one, we are still likely to get blocked if we want to scrape many pages.
 
-luckily, there are actually many ways to get around this problem, either by using rotating user-agents or by using proxies. 
+Luckily, there are actually many ways to get around this problem, either by using rotating user-agents or by using proxies. 
 The easiest solution that worked for me simply required the installation of the scrapy-user-agent package (https://pypi.org/project/scrapy-user-agents/), and adding these lines to **settings.py**:
 ```python
 DOWNLOADER_MIDDLEWARES = {
@@ -299,6 +299,38 @@ DOWNLOADER_MIDDLEWARES = {
 }
 ```
 
-and nothing more than that is required. Now you have a functional spider that won't get blocked immediately.
+And nothing more than that is required. Now you have a functional spider that won't get blocked immediately.
+
+## running the spider
+
+Running our finished spider is extremely simple. In the command line/terminal/anaconda prompt, navigate into the project_directory that contains the **"scrapy.cfg"** file, then type in the following:
+
+```
+scrapy crawl <spider_name>
+```
+
+## Exporting the scraped data
+
+The simplest way to export our scraped data is to use scrapy's built-in function when running the spider. 
+
+To save the data in csv format:
+```
+scrapy crawl <spider_name> -o file_name.csv
+```
+And in json format:
+```
+scrapy crawl <spider_name> -o file_name.json
+```
 
 ## Optional additions
+
+As you can see above, creating a functional and useful spider doesn't actually require much. However, scrapy has a lot of additional functionality we could make use of. I won't get into the details, just mention a few options:
+
+1. Scrapy actually has 5 types of spiders we can inherit from, not just the basic spider we used here. Depending on the type of data you want to scrape, consider looking into the other options. For example, I found the crawlSpider class very useful for automating and streamlining pagination and following many links.
+2. Use the pipelines.py file to create data cleaning methods and/or to send the scraped data to a database of your choice (SQL, MongoDB, etc.)
+3. Use the items.py file to define a class for the scraped data (instead of passing it through a simple dictionary).
+
+## Useful links
+1. https://docs.scrapy.org/ - Scrapy's documentation.
+2. https://www.udemy.com/course/web-scraping-in-python-using-scrapy-and-splash/ - A useful udemy course that goes over all the basics.
+3. https://youtube.com/playlist?list=PLhTjy8cBISEqkN-5Ku_kXG4QW33sxQo0t - A helpful course on youtube.
