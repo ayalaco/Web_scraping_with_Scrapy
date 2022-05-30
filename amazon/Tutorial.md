@@ -66,7 +66,7 @@ import scrapy
 class SpiderNameSpider(scrapy.Spider):
     name = 'spider_name'
     allowed_domains = ['www.domainname.com']
-    start_urls = ['http://www.domainname.com/']
+    start_urls = ['http://www.domainname.com/page-we-want-to-scrape']
 
     def parse(self, response):
         pass
@@ -224,7 +224,7 @@ import scrapy
 class SpiderNameSpider(scrapy.Spider):
     name = 'spider_name'
     allowed_domains = ['www.domainname.com']
-    start_urls = ['http://www.domainname.com/']
+    start_urls = ['http://www.domainname.com/page-we-want-to-scrape']
 
     def parse(self, response):
 
