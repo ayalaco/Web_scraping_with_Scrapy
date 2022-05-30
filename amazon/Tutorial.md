@@ -96,7 +96,7 @@ scraped_data = response.css("css_expression").get()
 
 XPath is a language used to identify parts in an XML document (but works with HTML as well). CSS is a language used to apply styles to HTML documents. Both are equally useful for identifying relevent sections in a web page.The choice of using xpath or css depends on whether the user is more familiar with XPath expressions or with CSS.
 
-To those who are familiar with neither and/or are short on time, this chrome extension, https://selectorgadget.com/, is a useful tool that will find the css/xpath expression for you just by clicking on the desired content in the web page.
+To those who are familiar with neither and/or are short on time, this chrome extension, https://selectorgadget.com/, is a useful tool that will find the css/xpath expression for you just by clicking on the desired content in the web page. That said, I do recommend obtaining even just a passing familiarity.
 
 Both the xpath() and css() methods return a list of selectors. Each selector in the list references a section of the document that matches the css/xpath expression. In order to access the textual data within these selectors, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual contant of the first match (or None if there is no match), and **getall()** will return a list of all the results.
 
