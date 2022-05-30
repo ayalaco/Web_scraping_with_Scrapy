@@ -78,7 +78,7 @@ A spider class that inherits from scrapy's base spider class, "scrapy.Spider", i
 
 **"allowed_domains" -** contains a list of the domains we're interested in scraping. It will prevent our spider from following links that lead outside of the specified domains during scraping. Do not add "https://" in the begining!
 
-**"start_urls" -** contains the urls of the pages we would like to start scraping from. Scrapy automatically adds "http://" to the url we inputed. Make sure to change that it "https://" if that is the case for your url. Scrapy will send sequential requests to these specified urls and the response downloaded from each url will be passed on to the **"parse()"** method to be processed (The "response" holds the url page's content and it has many helpful methods to process said content).
+**"start_urls" -** contains the urls of the pages we would like to start scraping from. Scrapy automatically adds "http://" to the url we inputed. Make sure to change it to "https://" if that is the case for your url. Scrapy will send sequential requests to these specified urls and the response downloaded from each url will be passed on to the **"parse()"** method to be processed (The "response" holds the url page's content and it has many helpful methods to process said content).
 
 **"parse() -"** This method is used to extract the scraped data and find new urls to follow and send new requests to.
 
