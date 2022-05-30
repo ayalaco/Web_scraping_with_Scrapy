@@ -205,7 +205,7 @@ next_page_link = response.xpath("//xpath_expression").get()
 ```
 When we reach the last page the selector will return **None** when it won't find a match.
 
-If there is a valid link to the next page, we'll follow it and send the response to the same parse_reviews() function (don't forget to pass the relevant data you want to pass forward through the **meta** argument).
+If there is a valid link to the next page, we'll follow it and send the response to the same **parse_reviews()** function (don't forget to pass the relevant data you want to pass forward through the **meta** argument).
 ```python
 if next_page_link:
     yield scrapy.follow(url=next_page_link,
@@ -275,7 +275,7 @@ class SpiderNameSpider(scrapy.Spider):
         # scrape the link for the next page:
         next_page_link = response.xpath("//xpath_expression").get()
 
-        # if a next page exists, follow the link and process the next page using the same **parse_reviews()** function:
+        # if a next page exists, follow the link and process the next page using the same parse_reviews() function:
         if next_page_link:
             yield scrapy.follow(url=next_page_link,
                                 callback=self.parse_reviews,
