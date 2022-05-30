@@ -36,7 +36,7 @@ The <project_name> folder contains the following files:
 
 This is the scaffold on top of which we will build our spider.
 
-**"items.py"** - used to define dict-like subclasses for the scraped items.
+**"items.py"** - used to define dict-like classes for the scraped items.
 
 **"middlewares.py"** - used to define models with custom functionality that process the requests/responses from/to a website or a spider.
 
