@@ -122,8 +122,8 @@ def parse(self, response):
                 'item_rating': item_rating,
             }
 ```
-_*Note that when we use an xpath expression to search within a selected object instead of a response object, we need to start the expression with ".//" instead of "//".
-_
+Note that when we use an xpath expression to search within a selected object instead of a response object, we need to start the expression with ".//" instead of "//".
+
 If pipelines were defined in **"pipelines.py"** (not mandatory), then the dictionary that contains the scraped data is passed forward through these pipelines to be processed further. The order of the pipelines is determined in **"settings.py"** like this:
 
 ```python
