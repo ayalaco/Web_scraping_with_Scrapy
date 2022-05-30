@@ -87,7 +87,7 @@ A spider class that inherits from scrapy's base spider class, "scrapy.Spider", i
 As mentioned above, the act of extracting useful data is done through the **"parse()** method. To extract data from the response, we'll use scrapy's Selectors:
 
 ```python
-scraped_data = response.xpath("xpath_expression").get()
+scraped_data = response.xpath("//xpath_expression").get()
 ```
 or
 ```python
@@ -106,14 +106,14 @@ Alternatively, we can use nested selectors. i.e. continue to use the selection m
 def parse(self, response):
 
     # select the relevant sections in the HTML document:
-    items = response.xpath("xpath_expression")
+    items = response.xpath("//xpath_expression")
 
         for item in items:
 
             # select data to scrape within each section:
-            item_title = item.xpath(".xpath_expression").get()
-            item_ingredients = item.xpath(".xpath_expression").getall()
-            item_rating = item.xpath(".xpath_expression").get()
+            item_title = item.xpath(".//xpath_expression").get()
+            item_ingredients = item.xpath(".//xpath_expression").getall()
+            item_rating = item.xpath(".//xpath_expression").get()
 
             # send the scraped data to be processed:
             yield {
@@ -154,11 +154,11 @@ def parse(self, response):
     
     # scrape data from the current page:
     item_url = response.url
-    item_name = response.xpath("xpath_expression").get()
-    item_ingredients = response.xpath("xpath_expression").get()
+    item_name = response.xpath("//xpath_expression").get()
+    item_ingredients = response.xpath("//xpath_expression").get()
     
     # get link to another page (for example, a reviews page):
-    link = response.xpath("xpath_expression").get()
+    link = response.xpath("//xpath_expression").get()
     
     # follow link to another page and parse its content:
     yield response.follow(url=link,
@@ -178,14 +178,14 @@ def parse_reviews(self, response):
     item_ingredients = response.request.meta['item_ingredients']
     
     # select all the separate reviews in the page:
-    reviews = response.xpath("xpath_expression")
+    reviews = response.xpath("//xpath_expression")
     
     # iterate over the reviews:
     for review in reviews:
         
         # scrape the title and text of the review:
-        review_title = review.xpath(".xpath_expression").get()
-        review_body = review.xpath(".xpath_expression").get()
+        review_title = review.xpath(".//xpath_expression").get()
+        review_body = review.xpath(".//xpath_expression").get()
         
         # yield all the scraped data from one review in dict form:
         yield {
@@ -201,7 +201,7 @@ def parse_reviews(self, response):
 What happens if we want to scrape something that spans several pages? For example, calling back to the previous example, when we have several pages of reviews.
 The solution is actually similar to what we just did: we follow the link to the next page from our current one, until there is no link to scrape because we reached the last page.
 ```python
-next_page_link = response.xpath("xpath_expression").get()
+next_page_link = response.xpath("//xpath_expression").get()
 ```
 When we reach the last page the selector will return **None** when it won't find a match.
 
@@ -230,11 +230,11 @@ class SpiderNameSpider(scrapy.Spider):
 
         # scrape data from the current page:
         item_url = response.url
-        item_name = response.xpath("xpath_expression").get()
-        item_ingredients = response.xpath("xpath_expression").get()
+        item_name = response.xpath("//xpath_expression").get()
+        item_ingredients = response.xpath("//xpath_expression").get()
 
         # get link to another page (for example, a reviews page):
-        link = response.xpath("xpath_expression").get()
+        link = response.xpath("//xpath_expression").get()
 
         # follow link to another page and parse its content:
         yield response.follow(url=link,
@@ -254,14 +254,14 @@ class SpiderNameSpider(scrapy.Spider):
         item_ingredients = response.request.meta['item_ingredients']
 
         # select all the separate reviews in the page:
-        reviews = response.xpath("xpath_expression")
+        reviews = response.xpath("//xpath_expression")
 
         # iterate over the reviews:
         for review in reviews:
 
             # scrape the title and text of the review:
-            review_title = review.xpath(".xpath_expression").get()
-            review_body = review.xpath(".xpath_expression").get()
+            review_title = review.xpath(".//xpath_expression").get()
+            review_body = review.xpath(".//xpath_expression").get()
 
             # yield all the scraped data from one review in dict form:
             yield {
@@ -273,7 +273,7 @@ class SpiderNameSpider(scrapy.Spider):
             }
 
         # scrape the link for the next page:
-        next_page_link = response.xpath("xpath_expression").get()
+        next_page_link = response.xpath("//xpath_expression").get()
 
         # if a next page exists, follow the link and process the next page using the same **parse_reviews()** function:
         if next_page_link:
