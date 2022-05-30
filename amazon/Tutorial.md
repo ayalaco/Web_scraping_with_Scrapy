@@ -14,7 +14,7 @@ pip install scrapy-user-agents
 
 ## Generate a project
 
-In the command line/Anaconda prompt/termianl, navigate into the folder where you wish to create your project and type in:
+In the command line/Anaconda prompt/terminal, navigate into the folder where you wish to create your project and type in:
 
 ```
 scrapy startproject <project_name> [project_dir]
@@ -42,7 +42,7 @@ This is the scaffold on top of which we will build our spider.
 
 **"pipelines.py"** - used to post-process the scraped items (duplicate removal, storing in a database etc.)
 
-**"settings.py"** - used to customize the behaviour of all scrapy components (core, extensions, pipelines and the spiders themselves).
+**"settings.py"** - used to customize the behavior of all scrapy components (core, extensions, pipelines and the spiders themselves).
 
 Note that since we're building a very basic spider, we won't actually change too much in these files.
 
@@ -76,9 +76,9 @@ A spider class that inherits from scrapy's base spider class, "scrapy.Spider", i
 
 **"name" -** The spider's unique name.
 
-**"allowed_domains" -** contains a list of the domains we're interested in scraping. It will prevent our spider from following links that lead outside of the specified domains during scraping. Do not add "https://" in the begining!
+**"allowed_domains" -** contains a list of the domains we're interested in scraping. It will prevent our spider from following links that lead outside of the specified domains during scraping. Do not add "https://" in the beginning!
 
-**"start_urls" -** contains the urls of the pages we would like to start scraping from. Scrapy automatically adds "http://" to the url we inputed. Make sure to change it to "https://" if that is the case for your url. Scrapy will send sequential requests to these specified urls and the response downloaded from each url will be passed on to the **"parse()"** method to be processed (The "response" holds the url page's content and it has many helpful methods to process said content).
+**"start_urls" -** contains the urls of the pages we would like to start scraping from. Scrapy automatically adds "http://" to the url we inputted. Make sure to change it to "https://" if that is the case for your url. Scrapy will send sequential requests to these specified urls and the response downloaded from each url will be passed on to the **"parse()"** method to be processed (The "response" holds the url page's content and it has many helpful methods to process said content).
 
 **"parse() -"** This method is used to extract the scraped data and find new urls to follow and send new requests to.
 
@@ -94,18 +94,18 @@ or
 scraped_data = response.css("css_expression").get()
 ```
 
-XPath is a language used to identify parts in an XML document (but works with HTML as well). CSS is a language used to apply styles to HTML documents. Both are equally useful for identifying relevent sections in a web page.The choice of using xpath or css depends on whether the user is more familiar with XPath expressions or with CSS.
+XPath is a language used to identify parts in an XML document (but works with HTML as well). CSS is a language used to apply styles to HTML documents. Both are equally useful for identifying relevant sections in a web page. The choice of using xpath or css depends on whether the user is more familiar with XPath expressions or with CSS.
 
 To those who are familiar with neither and/or are short on time, this chrome extension, https://selectorgadget.com/, is a useful tool that will find the css/xpath expression for you just by clicking on the desired content in the web page. That said, I do recommend obtaining even just a passing familiarity with one of the options.
 
-Both the xpath() and css() methods return a list of selectors. Each selector in the list references a section of the document that matches the css/xpath expression. In order to access the textual data within these selectors, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual contant of the first match (or None if there is no match), and **getall()** will return a list of all the results.
+Both the xpath() and css() methods return a list of selectors. Each selector in the list references a section of the document that matches the css/xpath expression. In order to access the textual data within these selectors, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual content of the first match (or None if there is no match), and **getall()** will return a list of all the results.
 
 Alternatively, we can use nested selectors. i.e. continue to use the selection methods to extract data from each the document sections that where selected previously. For example:
 
 ```python
 def parse(self, response):
 
-    # select the relevent sections in the HTML document:
+    # select the relevant sections in the HTML document:
     items = response.xpath("xpath_expression")
 
         for item in items:
@@ -124,7 +124,7 @@ def parse(self, response):
 ```
 _*Note that when we use an xpath expression to search within a selected object instead of a response object, we need to start the expression with ".//" instead of "//".
 _
-If pipelines were defined in **"pipelines.py"** (not mandetory), then the dictionary that contains the scraped data is passed forward through these pipelines to be processed further. The order of the pipelines is determined in **"settings.py"** like this:
+If pipelines were defined in **"pipelines.py"** (not mandatory), then the dictionary that contains the scraped data is passed forward through these pipelines to be processed further. The order of the pipelines is determined in **"settings.py"** like this:
 
 ```python
 ITEM_PIPELINES = {
@@ -137,9 +137,9 @@ The lower the number, the higher the priority of execution.
 
 ## Following links
 
-Sometimes we won't find all the information we want to scrape within one document. Instead, we'd like to folllow a link within the document and scrape additional information from there.
+Sometimes we won't find all the information we want to scrape within one document. Instead, we'd like to follow a link within the document and scrape additional information from there.
 
-There are actually several ways to do this, but the one I find simplest is to use the respnose's **"follow()"** method. This method takes in several important arguments:
+There are actually several ways to do this, but the one I find simplest is to use the response's **"follow()"** method. This method takes in several important arguments:
 
 **url** - The url we scraped from the original document and which we wish to follow. This url can be either an absolute url or relative to the url of the current document.
 
@@ -177,7 +177,7 @@ def parse_reviews(self, response):
     item_name = response.request.meta['item_name']
     item_ingredients = response.request.meta['item_ingredients']
     
-    # select all the seperate reviews in the page:
+    # select all the separate reviews in the page:
     reviews = response.xpath("xpath_expression")
     
     # iterate over the reviews:
@@ -198,7 +198,7 @@ def parse_reviews(self, response):
 ```
 
 ## Pagination
-What happens if we want to scrape something that spans several pages? For example, calling back to the previouse example, when we have several pages of reviews.
+What happens if we want to scrape something that spans several pages? For example, calling back to the previous example, when we have several pages of reviews.
 The solution is actually similar to what we just did: we follow the link to the next page from our current one, until there is no link to scrape because we reached the last page.
 ```python
 next_page_link = response.xpath("xpath_expression").get()
@@ -253,7 +253,7 @@ class SpiderNameSpider(scrapy.Spider):
         item_name = response.request.meta['item_name']
         item_ingredients = response.request.meta['item_ingredients']
 
-        # select all the seperate reviews in the page:
+        # select all the separate reviews in the page:
         reviews = response.xpath("xpath_expression")
 
         # iterate over the reviews:
@@ -333,4 +333,4 @@ As you can see above, creating a functional and useful spider doesn't actually r
 ## Useful links
 1. https://docs.scrapy.org/ - Scrapy's documentation.
 2. https://www.udemy.com/course/web-scraping-in-python-using-scrapy-and-splash/ - A useful udemy course that goes over all the basics.
-3. https://youtube.com/playlist?list=PLhTjy8cBISEqkN-5Ku_kXG4QW33sxQo0t - A helpful course on youtube.
+3. https://youtube.com/playlist?list=PLhTjy8cBISEqkN-5Ku_kXG4QW33sxQo0t - A helpful course on YouTube.
