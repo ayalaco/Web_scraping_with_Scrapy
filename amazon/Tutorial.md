@@ -100,7 +100,7 @@ To those who are familiar with neither and/or are short on time, this chrome ext
 
 Both the xpath() and css() methods return a list of selectors. Each selector in the list references a section of the document that matches the css/xpath expression. In order to access the textual data within these selectors, we need to use the selector **get()** or **getall()** methods. **get()** will return the textual content of the first match (or None if there is no match), and **getall()** will return a list of all the results.
 
-Alternatively, we can use nested selectors. i.e. continue to use the selection methods to extract data from each the document sections that where selected previously. For example:
+Alternatively, we can use nested selectors. i.e. continue to use the selection methods to extract data from each of the document sections that where selected previously. For example:
 
 ```python
 def parse(self, response):
