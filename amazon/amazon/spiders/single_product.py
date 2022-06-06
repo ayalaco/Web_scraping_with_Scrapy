@@ -3,6 +3,10 @@ from scrapy.http import TextResponse
 
 
 class SingleProductSpider(scrapy.Spider):
+    """
+    Scrapes all reviews for a single product
+    """
+    
     name = 'single_product'
     allowed_domains = ['www.amazon.com']
     start_urls = [
@@ -14,10 +18,10 @@ class SingleProductSpider(scrapy.Spider):
         Accepts the content of the page in "start_urls". Extracts the name, url and ingredients of the product.
         It then extracts and follows a link to the product's reviews, to be processed in the parse_reviews() function.
 
-        Args:
+        :args:
         response: holds the url page's content
 
-        yield: a request object for the review's url
+        :returns: a request object for the review's url
         """
 
         product_url = response.url
@@ -35,16 +39,16 @@ class SingleProductSpider(scrapy.Spider):
                                     "product_ingredients": product_ingredients}
                               )
 
-    def parse_reviews(self, response: TextResponse) -> dict:
+    def parse_reviews(self, response: TextResponse):
         """
         Accepts the content of the reviews page and the meta data from the function that originated the request.
         Extracts the title, body and rating from each review.
         Follows a link to the next page to repeat the process (if there is a next page).
 
-        Args:
+        :arg:
         response: holds the url page's content and meta data from the function that originated the request.
 
-        yield: a dictionary containing the scraped data for each review
+        :returns: a dictionary containing the scraped data for each review
         """
 
         # access meta data:
