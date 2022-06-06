@@ -5,6 +5,10 @@ from scrapy.http import TextResponse
 
 
 class ReviewsSpider(CrawlSpider):
+    """
+    Scrapes all reviews for all products found in a search results url (inside "start_urls")
+    """
+    
     name = 'reviews'
     allowed_domains = ['www.amazon.com']
     start_urls = [
