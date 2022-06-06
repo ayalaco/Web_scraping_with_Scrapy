@@ -46,7 +46,7 @@ This is the scaffold on top of which we will build our spider.
 
 Note that since we're building a very basic spider, we won't actually change too much in these files.
 
-There is a also a folder called **"spiders/"** that doesn't contain any spiders yet.
+There is also a folder called **"spiders/"** that doesn't contain any spiders yet.
 
 ## Generate a spider
 
