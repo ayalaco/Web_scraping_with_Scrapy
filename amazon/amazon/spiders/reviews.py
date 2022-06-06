@@ -24,9 +24,9 @@ class ReviewsSpider(CrawlSpider):
 
     def parse_item(self, response: TextResponse) -> scrapy.Request:
         """
-        Accepts the content of the page in "start_urls". If the url has not been scraped previously, it extracts the
-        name of the product and its ingredients. It then extracts and follows a link to the product's reviews, to be
-        processed in the parse_reviews() function.
+        Accepts the content of one of the urls that were found by the first Rule object. If the url has not been scraped
+        previously, it extracts the name of the product and its ingredients. It then extracts and follows a link to the
+        product's reviews, to be processed in the parse_reviews() function.
 
         Args:
         response: holds the url page's content
