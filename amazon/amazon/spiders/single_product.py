@@ -10,7 +10,7 @@ class SingleProductSpider(scrapy.Spider):
     ] # Change me! (can be more than one link in the list)
 
     def parse(self, response: TextResponse) -> scrapy.Request:
-        '''
+        """
         Accepts the content of the page in "start_urls". Extracts the name, url and ingredients of the product.
         It then extracts and follows a link to the product's reviews, to be processed in the parse_reviews() function.
 
@@ -18,7 +18,7 @@ class SingleProductSpider(scrapy.Spider):
         response: holds the url page's content
 
         yield: a request object for the review's url
-        '''
+        """
 
         product_url = response.url
         product_name = response.xpath("normalize-space(//span[@id='productTitle']/text())").get()
@@ -36,7 +36,7 @@ class SingleProductSpider(scrapy.Spider):
                               )
 
     def parse_reviews(self, response: TextResponse) -> dict:
-        '''
+        """
         Accepts the content of the reviews page and the meta data from the function that originated the request.
         Extracts the title, body and rating from each review.
         Follows a link to the next page to repeat the process (if there is a next page).
@@ -45,7 +45,7 @@ class SingleProductSpider(scrapy.Spider):
         response: holds the url page's content and meta data from the function that originated the request.
 
         yield: a dictionary containing the scraped data for each review
-        '''
+        """
 
         # access meta data:
         product_name = response.request.meta['product_name']
