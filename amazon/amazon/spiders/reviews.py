@@ -28,10 +28,10 @@ class ReviewsSpider(CrawlSpider):
         previously, it extracts the name of the product and its ingredients. It then extracts and follows a link to the
         product's reviews, to be processed in the parse_reviews() function.
 
-        Args:
+        :arg:
         response: holds the url page's content
 
-        yield: a request object for the reviews url
+        :returns: a request object for the review's url
         """
 
         product_url = response.url
@@ -53,16 +53,16 @@ class ReviewsSpider(CrawlSpider):
                                         "product_ingredients": product_ingredients}
                                   )
 
-    def parse_reviews(self, response: TextResponse) -> dict:
+    def parse_reviews(self, response: TextResponse):
         """
         Accepts the content of the reviews page and the meta data from the function that originated the request.
         Extracts the title, body and rating from each review.
         Follows a link to the next page to repeat the process (if there is a next page).
 
-        Args:
+        :arg:
         response: holds the url page's content and meta data from the function that originated the request.
 
-        yield: a dictionary containing the scraped data for each review
+        :returns: a dictionary containing the scraped data for each review
         """
 
         # access meta data:
