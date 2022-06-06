@@ -31,7 +31,7 @@ class ReviewsSpider(CrawlSpider):
         Args:
         response: holds the url page's content
 
-        yield: a request object for the review's url
+        yield: a request object for the reviews url
         """
 
         product_url = response.url
