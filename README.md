@@ -8,9 +8,14 @@ What it is not, is an HTML/CSS tutorial. Basic knowledge is required, though, an
 This includes the scraping library itself and its associated user-agent utility library:
 
 ```
-pip install Scrapy
+pip install scrapy
 pip install scrapy-user-agents
 ```
+Alternatively, Scrapy can be installed using Anaconda/Miniconda:
+```
+conda install -c conda-forge scrapy
+```
+This is actually the preferred method according to the official user guide.
 
 ## Generate a project
 
